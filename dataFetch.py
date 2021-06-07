@@ -4,7 +4,7 @@ import os
 import _sqlite3
 from dotenv import load_dotenv
 
-conn = _sqlite3.connect(r'C:\Users\nhemingway\PycharmProjects\TimeSheet\TimeSheet.db')
+conn = _sqlite3.connect(r'./TimeSheet.db')
 cursor = conn.cursor()
 
 load_dotenv()
@@ -55,13 +55,13 @@ def isAdmin(userName):
 # Takes username and retrieves departments which they belong to
 def combo1_1Vals(userName):
     comboListDep = []
-
     cursor.execute('''
                             SELECT dep_id
                             FROM employee
                             WHERE username = ?
-                          ''', (userName.lower()))
+                          ''', (userName.lower(),))
     result = cursor.fetchall()
+    print('made it')
     if len(result) > 0:
         for row in result:
             comboListDep += row
@@ -78,7 +78,7 @@ def combo1_2Vals(dep):
                             FROM process_list
                             WHERE dep =  ?
 
-                          ''', (dep))
+                          ''', (dep,))
     result = cursor.fetchall()
     comboList = []
     if len(result) > 0:
@@ -96,7 +96,7 @@ def combo1_3Vals(legalEnt, dep):
                             FROM process_list
                             WHERE legalEntity = ? AND dep = ?;
 
-                          ''', (legalEnt, dep))
+                          ''', (legalEnt, dep,))
     result = cursor.fetchall()
     comboListTask = []
     if len(result) > 0:
@@ -114,7 +114,7 @@ def combo1_4Vals(task, legalEnt, dep):
                             FROM process_list
                             WHERE Task = ?  AND legalEntity = ? AND dep = ?;
 
-                          ''', (task, legalEnt, dep))
+                          ''', (task, legalEnt, dep,))
     result = cursor.fetchall()
     comboListTask = []
     if len(result) > 0:
@@ -158,7 +158,7 @@ def pushToDB(submitLst):
                                     INSERT INTO timesheet (dep_name, legalent_name,task_name, customer, hours, dateworked,employee)
                                     VALUES (?,?,?,?,?,?,?);
     
-                                  ''', (dep, ent, task, customer, hours, date, user))
+                                  ''', (dep, ent, task, customer, hours, date, user,))
         conn.commit()  # Connection must be committed each time a change has been made to the DB
 
 
@@ -180,7 +180,7 @@ def checkForRec(submitLst):
                                     WHERE dep_name = ? AND legalent_name = ? AND task_name = ? AND customer = ?
                                     AND dateworked = ? AND employee = ?;
 
-                                  ''', (dep, ent, task, customer, date, user))
+                                  ''', (dep, ent, task, customer, date, user,))
         result = cursor.fetchall()
 
     print('Matching result: ' + str(result))
@@ -200,7 +200,7 @@ def addUser(submitLst):
                                     INSERT INTO employee (emp_name, username,dep_id, isadmin)
                                     VALUES (?,?,?,?);
     
-                                  ''', (name, username, dep, adm))
+                                  ''', (name, username, dep, adm,))
     conn.commit()
 
 
@@ -263,7 +263,7 @@ def getPrevEntries(startDate, endDate, username):
                                         FROM timesheet
                                         WHERE employee = ? AND dateworked BETWEEN ? AND ?
 
-                                      ''', (username, startDate,endDate))
+                                      ''', (username, startDate,endDate,))
     result = cursor.fetchall()
     return result
 
@@ -277,7 +277,7 @@ def updateRecords(oldRec, newRec):
                                           ''',
                    (newRec[0], newRec[1], newRec[2], newRec[3], newRec[4], newRec[5], newRec[6], oldRec[0], oldRec[1],
                     oldRec[2], oldRec[3],
-                    oldRec[4], oldRec[5], oldRec[6]))
+                    oldRec[4], oldRec[5], oldRec[6],))
     conn.commit()
 
 
@@ -287,7 +287,7 @@ def deleteRecord(oldRec):
                                                 DELETE FROM timesheet
                                                 WHERE dep_name = ? AND legalent_name = ? AND task_name = ? AND customer = ? AND hours = ? AND dateworked = ? AND employee = ?
                                               ''',
-                   (oldRec[0], oldRec[1], oldRec[2], oldRec[3], oldRec[4], oldRec[5], oldRec[6]))
+                   (oldRec[0], oldRec[1], oldRec[2], oldRec[3], oldRec[4], oldRec[5], oldRec[6],))
     conn.commit()
 
 
@@ -298,7 +298,7 @@ def checkForStat(startDate, endDate):
                                             FROM stats
                                             WHERE dates BETWEEN ? AND ?
 
-                                          ''', (startDate,endDate))
+                                          ''', (startDate,endDate,))
     result = cursor.fetchall()
     return result
 
@@ -310,7 +310,7 @@ def updateRecCombo1(empName):
                                 SELECT dep_id
                                 FROM employee
                                 WHERE emp_name = ?; 
-                              ''', (empName.lower()))
+                              ''', (empName.lower(),))
     result = cursor.fetchall()
     if len(result) > 0:
         for row in result:

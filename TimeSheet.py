@@ -207,6 +207,7 @@ def main():  # Login Form is called first and will remain until closed or user h
             dbuser = login.lineEdit_username.text().lower()
             login.close()  # Closes login instance (kills Window)
             timeSheet(dbuser)  # Calls timesheet form if username is correct
+
         else:
             msg.setText('Incorrect Username')  # Message pop up to indicate user
             msg.exec_()
@@ -290,7 +291,6 @@ def timeSheet(dbuser):  # username is passed in from Login form after successful
         form.thur.setText('<b>' + '&nbsp;Thu' + '<br/>' + newFormat[4] + '</b>')
         form.fri.setText('<b>' + '&nbsp;Fri' + '<br/>' + newFormat[5] + '</b>')
         form.sat.setText('<b>' + '&nbsp;Sat' + '<br/>' + newFormat[6] + '</b>')
-
         # Turns the current date Text to a Light Gray
         today = str(datetime.today().strftime("%b %d"))
         for widget in form.children():
@@ -503,6 +503,7 @@ def timeSheet(dbuser):  # username is passed in from Login form after successful
     '''loads values of first column of comboboxes'''
 
     def loadFirstCombos():
+        print(username)
         combo1Val = dataFetch.combo1_1Vals(username)
 
         row2Lst[0].addItem("")
