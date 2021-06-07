@@ -553,6 +553,7 @@ def timeSheet(dbuser):  # username is passed in from Login form after successful
         elif currCombo.objectName() == 'combo1_2':
             nextCombo.lineEdit().setPlaceholderText('Please Select a Task')
 
+
         # load each comboboxes values according to their column position
         if colNum == 1:
             newComboVals = dataFetch.combo1_2Vals(currCombo.currentText())
